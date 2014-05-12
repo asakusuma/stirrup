@@ -1,0 +1,27 @@
+{
+  "name": "stirrup",
+  "version": "0.0.1",
+  "private": false,
+  "scripts": {
+    "start": "node app.js",
+    "test": "node_modules/venus/bin/venus run -t tests -n"
+  },
+  "author": {
+    "name" : "Asa Kusuma",
+    "email" : "asa.kusuma@gmail.com",
+    "url" : "http://asakusuma.com/"
+  },
+  "main": "main",
+  "dependencies": {},
+  "devDependencies": {
+    "venus": "*",
+    "broccoli": "*",
+    "broccoli-replace": "*",
+    "grunt": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-broccoli-build": "*",
+    "broccoli-uglify-js": "*",
+    "broccoli-merge-trees": "*",
+    "broccoli-file-mover": "*"
+  }
+}

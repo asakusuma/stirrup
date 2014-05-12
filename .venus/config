@@ -1,0 +1,12 @@
+// Configuration file for Venus
+// All paths can be relative (to the location of this config file) or absolute
+{
+  hostname: 'localhost',
+
+  includes: {
+    default: [
+      '../main.js',
+      '../lib/sinon-1.8.1.js'
+    ]
+  }
+}
