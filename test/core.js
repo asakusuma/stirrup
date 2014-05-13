@@ -22,12 +22,72 @@ describe('Stirrup Core', function() {
   });
 
   describe('Promise()', function() {
-    it('should create a new promise', function() {
+    it('should create a new promise with a then() function', function() {
       instance = new Stirrup(Library);
 
       var promise = new instance.Promise(function() {});
 
       isPromise(promise);
+    });
+
+    it('should create a new fulfillable promise', function(done) {
+      var value = {};
+      instance = new Stirrup(Library);
+
+      var promise = new instance.Promise(function(f) { f(value); });
+
+      promise.then(function(v) {
+        expect(v).to.be(value);
+        done();
+      }).then(null, done);
+    });
+
+    it('should create a new rejectable promise', function(done) {
+      var value = {};
+      instance = new Stirrup(Library);
+
+      var promise = new instance.Promise(function(f, r) { r(value); });
+
+      promise.then(null, function(v) {
+        expect(v).to.be(value);
+        done();
+      }).then(null, done);
+    });
+  });
+
+  describe('defer()', function() {
+    it('should create a new deferred with a promise promise property with a then() function', function() {
+      instance = new Stirrup(Library);
+
+      var deferred = instance.defer();
+
+      isPromise(deferred.promise);
+    });
+
+    it('should create a new fulfillable deferred', function(done) {
+      var value = {};
+      instance = new Stirrup(Library);
+
+      var deferred = instance.defer();
+      deferred.fulfill(value);
+
+      deferred.promise.then(function(v) {
+        expect(v).to.be(value);
+        done();
+      }).then(null, done);
+    });
+
+    it('should create a new rejectable deferred', function(done) {
+      var value = {};
+      instance = new Stirrup(Library);
+
+      var deferred = instance.defer();
+      deferred.reject(value);
+
+      deferred.promise.then(null, function(v) {
+        expect(v).to.be(value);
+        done();
+      }).then(null, done);
     });
   });
 });
