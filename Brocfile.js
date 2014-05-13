@@ -6,7 +6,7 @@ var mergeTrees = require('broccoli-merge-trees');
 var moveFile = require('broccoli-file-mover');
 
 var build = function(broccoli) {
-  var source = fs.readFileSync('./source.js', 'utf8').replace(/\n/g, '\n  ');
+  var source = fs.readFileSync('./source/core.js', 'utf8').replace(/\n/g, '\n  ');
 
   var dev = replace('templates', {
     files: [
@@ -20,6 +20,12 @@ var build = function(broccoli) {
     ]
   });
 
+  var main = moveFile(dev, {
+    srcFile: 'common.js',
+    destFile: '../../main.js',
+    copy: true
+  })
+
 /*
   //Attempting to create /prod directory for minified artifacts
   var prod = uglify(moveFile(dev, {
@@ -28,11 +34,11 @@ var build = function(broccoli) {
     copy: true
   }));
 
-  return mergeTrees([dev, prod], {
+  
+*/
+  return mergeTrees([dev, main], {
     overwrite: true
   });
-*/
-  return dev;
 };
 
 module.exports = build(broccoli);

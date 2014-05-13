@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         dest: ouptutDir
       }
     },
-    clean: [ouptutDir]
+    clean: [ouptutDir, 'main.js']
   });
 
   grunt.loadNpmTasks('grunt-broccoli-build');
