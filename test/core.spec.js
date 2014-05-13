@@ -91,3 +91,7 @@ describe('Stirrup Core', function() {
     });
   });
 });
+
+describe('buildStaticFunctions()', function() {
+  //Nothing for now
+});

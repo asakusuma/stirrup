@@ -5,7 +5,7 @@
 
   includes: {
     default: [
-      '../source.js',
+      '../source/core.js',
       '../lib/sinon-1.8.1.js'
     ]
   }
