@@ -32,12 +32,7 @@ var Stirrup = function(library) {
 
 Stirrup.prototype.buildConstructor = function() {
   if(!this.isNative) {
-    var library = this.library;
-    var config = this.config;
-
-    var constructor = config.constructor ? library[config.constructor] : library;
-
-    this.Promise = constructor;
+    this.Promise = this.config.constructor ? this.library[this.config.constructor] : this.library;
   } else {
     this.Promise = this.library;
   }
