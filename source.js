@@ -1,30 +1,47 @@
-var Stirrup = function(library, funcNameMap) {
-  if(typeof library !== 'object') {
+var Stirrup = function(library) {
+  if(typeof library !== 'object' && typeof library !== 'function') {
     throw 'You must provide Stirrup with a promise library';
   }
   this.library = library;
   this.isNative = (typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1);
 
-  var staticFuncNameMap = {
-    all: {
-      nativeName: 'all',
-      aliases: [
-        'all',
-        'when'
-      ]
+  this.config = {
+    constructor: null,
+    staticFuncs: {
+      all: {
+        nativeName: 'all',
+        aliases: [
+          'all',
+          'when'
+        ]
+      }
     }
   };
 
-  if(typeof funcNameMap === 'object') {
+/*
+  if(typeof config === 'object') {
     for(var key in funcNameMap) {
       staticFuncNameMap[key] = funcNameMap[key];
     }
   }
-
-  this.buildStaticFunctions(staticFuncNameMap);
-  this.buildConstructor();
+  */
+  this.buildStaticFunctions(this.config.staticFuncs);
   this.buildDefer();
+  this.buildConstructor();
 };
+
+Stirrup.prototype.buildConstructor = function() {
+  if(!this.isNative) {
+    var library = this.library;
+    var config = this.config;
+
+    var constructor = config.constructor ? library[config.constructor] : library;
+
+    this.Promise = constructor;
+  } else {
+    this.Promise = this.library;
+  }
+}
 
 Stirrup.prototype.buildStaticFunctions = function(map) {
   var len = map.length;
@@ -50,10 +67,6 @@ Stirrup.prototype.buildStaticFunctions = function(map) {
       this[def.aliases[f]] = staticFunc;
     }
   }
-};
-
-Stirrup.prototype.buildConstructor = function() {
-
 };
 
 Stirrup.prototype.buildDefer = function() {

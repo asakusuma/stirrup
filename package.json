@@ -22,6 +22,7 @@
     "grunt-broccoli-build": "*",
     "broccoli-uglify-js": "*",
     "broccoli-merge-trees": "*",
-    "broccoli-file-mover": "*"
+    "broccoli-file-mover": "*",
+    "grunt-open": "*"
   }
 }

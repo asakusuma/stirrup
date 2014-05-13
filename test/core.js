@@ -1,7 +1,9 @@
 /**
  * @venus-include ../lib/bluebird.js
+ * @venus-include ../test-helpers.js
  */
 
+var Library = Promise.noConflict();
 describe('Stirrup Core', function() {
 
   var instance;
@@ -16,6 +18,16 @@ describe('Stirrup Core', function() {
       }
 
       expect(error).to.be('You must provide Stirrup with a promise library');
+    });
+  });
+
+  describe('Promise()', function() {
+    it('should create a new promise', function() {
+      instance = new Stirrup(Library);
+
+      var promise = new instance.Promise(function() {});
+
+      isPromise(promise);
     });
   });
 });

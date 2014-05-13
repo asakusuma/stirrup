@@ -8,7 +8,7 @@ var moveFile = require('broccoli-file-mover');
 var build = function(broccoli) {
   var source = fs.readFileSync('./source.js', 'utf8').replace(/\n/g, '\n  ');
 
-  var dev = replace('artifact-templates', {
+  var dev = replace('templates', {
     files: [
       '**/*.js'
     ],
