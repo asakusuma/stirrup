@@ -3,7 +3,19 @@
  * @venus-include ../test-helpers.js
  */
 
+/*
+ *  core.spec.js
+ *  --------------
+ *  Tests the core promise-creating functionality
+ *  of Stirrup instances.
+ */
+
 var Library = Promise.noConflict();
+Stirrup.prototype.getConfig = sinon.stub().returns({
+  constructor: null
+});
+Stirrup.prototype.buildStaticFunctions = sinon.stub();
+
 describe('Stirrup Core', function() {
 
   var instance;
@@ -90,8 +102,4 @@ describe('Stirrup Core', function() {
       }).then(null, done);
     });
   });
-});
-
-describe('buildStaticFunctions()', function() {
-  //Nothing for now
 });

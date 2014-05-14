@@ -6,30 +6,36 @@ var Stirrup = function(library) {
     this.isNative = (typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1);
   
     this.config = {
-      constructor: null,
-      staticFuncs: {
-        all: {
-          nativeName: 'all',
-          aliases: [
-            'all',
-            'when'
-          ]
-        }
-      }
-    };
+    	constructor: null,
+    	staticFuncs: {
+    		all: {
+    			nativeName: 'all',
+    			aliases: [
+    				'all',
+    				'when'
+    			]
+    		},
+    		spread: {},
+    		settle: {},
+    		fulfill: {
+    			aliases: [
+    				'fulfilled'
+    			]
+    		},
+    		reject: {
+    			aliases: [
+    				'rejected'
+    			]
+    		}
+    	}
+    }
   
     this.buildDefer();
     this.buildConstructor();
   
-  /*
-    if(typeof config === 'object') {
-      for(var key in funcNameMap) {
-        staticFuncNameMap[key] = funcNameMap[key];
-      }
+    if(this.buildStaticFunctions && this.config) {
+      this.buildStaticFunctions(this.config.staticFuncs);
     }
-    
-    this.buildStaticFunctions(this.config.staticFuncs);
-    */
   };
   
   Stirrup.prototype.buildConstructor = function() {
@@ -58,6 +64,29 @@ var Stirrup = function(library) {
       }
     } else {
       this.defer = this.library.defer;
+    }
+  };
+Stirrup.prototype.buildStaticFunctions = function(map) {
+    for(var libName in map) {
+      var def = map[libName];
+      var staticFunc = null;
+  
+      //If using native promises, and native promises implements
+      //the given function, save
+      if(this.isNative && Promise[def.nativeName]) {
+        staticFunc = Promise[def.nativeName];
+      }
+  
+      //If the function doesn't exist natively, use the library
+      if(!staticFunc) {
+        staticFunc = this.library[libName];
+      }
+  
+      //Attach function to aliases
+      var fLen = def.aliases.length;
+      for(var f = 0; f < fLen; f++) {
+        this[def.aliases[f]] = staticFunc;
+      }
     }
   };
 

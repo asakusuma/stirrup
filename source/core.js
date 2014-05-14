@@ -5,40 +5,23 @@ var Stirrup = function(library) {
   this.library = library;
   this.isNative = (typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1);
 
-  this.config = {
-    constructor: null,
-    staticFuncs: {
-      all: {
-        nativeName: 'all',
-        aliases: [
-          'all',
-          'when'
-        ]
-      }
-    }
-  };
-
   this.buildDefer();
   this.buildConstructor();
+  this.buildStaticFunctions();
+};
 
-/*
-  if(typeof config === 'object') {
-    for(var key in funcNameMap) {
-      staticFuncNameMap[key] = funcNameMap[key];
-    }
-  }
-  
-  this.buildStaticFunctions(this.config.staticFuncs);
-  */
+Stirrup.prototype.getConfig = function() {
+  //@@config
+  return config;
 };
 
 Stirrup.prototype.buildConstructor = function() {
   if(!this.isNative) {
-    this.Promise = this.config.constructor ? this.library[this.config.constructor] : this.library;
+    this.Promise = this.getConfig().constructor ? this.library[this.getConfig().constructor] : this.library;
   } else {
     this.Promise = this.library;
   }
-}
+};
 
 Stirrup.prototype.buildDefer = function() {
   if(this.isNative) {

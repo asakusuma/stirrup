@@ -4,9 +4,15 @@ var broccoli = require('broccoli');
 var uglify = require('broccoli-uglify-js');
 var mergeTrees = require('broccoli-merge-trees');
 var moveFile = require('broccoli-file-mover');
+var stringify = require('stringify-object');
 
 var build = function(broccoli) {
-  var source = fs.readFileSync('./source/core.js', 'utf8').replace(/\n/g, '\n  ');
+
+  var config = 'var config = ' + stringify(require('./config/bluebird.js')).replace(/\n/g, '\n    ');
+  var core = fs.readFileSync('./source/core.js', 'utf8').replace(/\n/g, '\n  ').replace('//@@config', config);
+  var statik = fs.readFileSync('./source/static.js', 'utf8').replace(/\n/g, '\n  ');
+
+  var source = core + '\n' + statik;
 
   var dev = replace('templates', {
     files: [
@@ -33,8 +39,7 @@ var build = function(broccoli) {
     destFile: 'prod',
     copy: true
   }));
-
-  
+  //https://github.com/rjackson/broccoli-file-mover/issues/6
 */
   return mergeTrees([dev, main], {
     overwrite: true

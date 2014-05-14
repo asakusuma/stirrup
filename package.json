@@ -23,6 +23,7 @@
     "broccoli-uglify-js": "*",
     "broccoli-merge-trees": "*",
     "broccoli-file-mover": "*",
-    "grunt-open": "*"
+    "grunt-open": "*",
+    "stringify-object": "*"
   }
 }
