@@ -12,34 +12,64 @@
  */
 
 var Library = Promise.noConflict();
+var Promise = null;
+var instance;
+
+var stubNative = function() {
+  Promise = Library;
+  Promise.toString = sinon.stub().returns('[native code]');
+};
+
+var unStubNative = function() {
+  Promise = null;
+};
+
 Stirrup.prototype.getConfig = sinon.stub().returns({
-  constructor: null
+  constructor: null,
+  staticFuncs: {
+    myLibFunction: {
+      nativeName: 'myNativeFunction',
+      aliases: [
+        'someAlias',
+        'someOtherAlias'
+      ]
+    },
+    empty: {},
+  }
 });
-Stirrup.prototype.buildStaticFunctions = sinon.stub();
 
-describe('Stirrup Static Functions', function() {
+describe('constructor', function() {
 
-  var instance;
+  describe('when native promises not available', function() {
 
-  describe('all', function() {
-    it('should resolve when and only when all promises have resolved', function(done) {
+    //If our environment has native promises, we need to remove them
+    if(typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1) {
+      unStubNative();
+    }
+
+    it('should proxy library function to aliases', function() {
       instance = new Stirrup(Library);
 
-      var fulfilled = sinon.spy();
-      var rejected = sinon.spy();
+      var originalFunc = Promise.myNativeFunction;
 
-      var promise1 = new instance.Promise(function(r) { r(); });
-      var d = instance.defer();
-      var promise2 = d.promise;
+      expect(instance.someAlias).to.be(originalFunc);
+      expect(instance.someOtherAlias).to.be(originalFunc);
+    });
+  });
+  describe('when native promises available', function() {
 
-      instance.all([promise1, promise2]).then(function() {
-        expect(rejected.called).to.be(false);
-        done();
-      }, rejected).then(null, done);
+    //If our environment doesn't have native promises, we need to stub them
+    if(!(typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1)) {
+      stubNative();
+    }
 
-      expect(fulfilled.called).to.be(false);
+    it('should proxy native function to aliases', function() {
+      instance = new Stirrup(Library);
 
-      d.fulfill();
+      var originalFunc = Library.myLibFunction;
+
+      expect(instance.someAlias).to.be(originalFunc);
+      expect(instance.someOtherAlias).to.be(originalFunc);
     });
   });
 });
