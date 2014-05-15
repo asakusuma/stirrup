@@ -1,6 +1,8 @@
-Stirrup.prototype.buildStaticFunctions = function(map) {
-  for(var libName in map) {
-    var def = map[libName];
+
+Stirrup.prototype.buildStaticFunctions = function() {
+  var staticFuncs = this.getConfig().staticFuncs;
+  for(var i = 0, len = staticFuncs.length; i < len; i++) {
+    var def = staticFuncs[i];
     var staticFunc = null;
 
     //If using native promises, and native promises implements
@@ -11,7 +13,7 @@ Stirrup.prototype.buildStaticFunctions = function(map) {
 
     //If the function doesn't exist natively, use the library
     if(!staticFunc) {
-      staticFunc = this.library[libName];
+      staticFunc = this.library[def.libName];
     }
 
     //Attach function to aliases

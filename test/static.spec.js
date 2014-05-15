@@ -26,20 +26,19 @@ var unStubNative = function() {
 
 Stirrup.prototype.getConfig = sinon.stub().returns({
   constructor: null,
-  staticFuncs: {
-    myLibFunction: {
+  staticFuncs: [
+    {
+      libName: 'myLibFunction',
       nativeName: 'myNativeFunction',
       aliases: [
         'someAlias',
         'someOtherAlias'
       ]
-    },
-    empty: {},
-  }
+    }
+  ]
 });
 
 describe('constructor', function() {
-
   describe('when native promises not available', function() {
 
     //If our environment has native promises, we need to remove them
@@ -56,6 +55,7 @@ describe('constructor', function() {
       expect(instance.someOtherAlias).to.be(originalFunc);
     });
   });
+
   describe('when native promises available', function() {
 
     //If our environment doesn't have native promises, we need to stub them

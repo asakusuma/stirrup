@@ -1,24 +1,31 @@
 module.exports = {
   constructor: null,
-  staticFuncs: {
-    all: {
+  staticFuncs: [
+    {
+      libName: 'all',
       nativeName: 'all',
       aliases: [
         'all',
         'when'
       ]
     },
-    spread: {},
-    settle: {},
-    fulfill: {
+    {
+      libName: 'spread'
+    },
+    {
+      libName: 'settle'
+    },
+    {
+      libName: 'fulfill',
       aliases: [
         'fulfilled'
       ]
     },
-    reject: {
+    {
+      libName: 'reject',
       aliases: [
         'rejected'
       ]
     }
-  }
+  ]
 };
