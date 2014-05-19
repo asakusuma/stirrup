@@ -44,7 +44,7 @@ var build = function() {
   //https://github.com/rjackson/broccoli-file-mover/issues/6
   */
 
-  return mergeTrees([dev, main, prod], {
+  return mergeTrees([dev, main], {
     overwrite: true
   });
 };

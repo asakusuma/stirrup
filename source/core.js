@@ -2,6 +2,7 @@ var Stirrup = function(library) {
   if(typeof library !== 'object' && typeof library !== 'function') {
     throw 'You must provide Stirrup with a promise library';
   }
+
   this.library = library;
   this.isNative = (typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1);
 
