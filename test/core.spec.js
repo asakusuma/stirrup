@@ -33,11 +33,11 @@ describe('Stirrup Core', function() {
     });
   });
 
-  describe('Promise()', function() {
+  describe('Instance function', function() {
     it('should create a new promise with a then() function', function() {
       instance = new Stirrup(Library);
 
-      var promise = new instance.Promise(function() {});
+      var promise = new instance(function() {});
 
       isPromise(promise);
     });
@@ -46,7 +46,7 @@ describe('Stirrup Core', function() {
       var value = {};
       instance = new Stirrup(Library);
 
-      var promise = new instance.Promise(function(f) { f(value); });
+      var promise = new instance(function(f) { f(value); });
 
       promise.then(function(v) {
         expect(v).to.be(value);
@@ -58,7 +58,7 @@ describe('Stirrup Core', function() {
       var value = {};
       instance = new Stirrup(Library);
 
-      var promise = new instance.Promise(function(f, r) { r(value); });
+      var promise = new instance(function(f, r) { r(value); });
 
       promise.then(null, function(v) {
         expect(v).to.be(value);

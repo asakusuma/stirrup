@@ -2,13 +2,12 @@ var Stirrup = function(library) {
   if(typeof library !== 'object' && typeof library !== 'function') {
     throw 'You must provide Stirrup with a promise library';
   }
-
   this.library = library;
   this.isNative = (typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1);
 
   this.buildDefer();
-  this.buildConstructor();
   this.buildStaticFunctions();
+  return this.getConstructor();
 };
 
 Stirrup.prototype.getConfig = function() {
@@ -16,11 +15,11 @@ Stirrup.prototype.getConfig = function() {
   return config;
 };
 
-Stirrup.prototype.buildConstructor = function() {
+Stirrup.prototype.getConstructor = function() {
   if(!this.isNative) {
-    this.Promise = this.getConfig().constructor ? this.library[this.getConfig().constructor] : this.library;
+    return this.getConfig().constructor ? this.library[this.getConfig().constructor] : this.library;
   } else {
-    this.Promise = this.library;
+    return this.library;
   }
 };
 

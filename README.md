@@ -24,3 +24,29 @@ The grunt build task creates 3 artifacts:
 * CommonJS module
 * AMD module
 * Global script file. Attaches module to `Stirrup` global variable.
+
+## Usage
+
+Create a new Stirrup instance and pass in your library.
+
+````JavaScript
+var P = new Stirrup(Bluebird);
+````
+Every Stirrup instance is it's own promise library object, analogous to the native `Promise`.
+
+### Promise creation
+
+Just like the native API, a Stirrup instance is also a promise constructor.
+
+````JavaScript
+var promise = new P(function(fulfill, reject) {
+    fulfill('Great success!');
+}); //This promise fulfills
+````
+
+Additionally, you can use `defer()` to create a deferred.
+````JavaScript
+var deferred = P.defer();
+deferred.fulfill('Great Success!');
+var promise = deferred.promise;
+````
