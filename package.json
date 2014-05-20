@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "private": false,
   "scripts": {
-    "start": "node app.js",
-    "test": "node_modules/venus/bin/venus run -t tests -n"
+    "test": "grunt test"
   },
   "author": {
     "name" : "Asa Kusuma",
