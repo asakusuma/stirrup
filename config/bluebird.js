@@ -1,5 +1,6 @@
 module.exports = {
   constructor: null,
+  defer: 'defer',
   staticFuncs: [
     {
       libName: 'all',
