@@ -4,6 +4,7 @@ var broccoli = require('broccoli');
 var uglify = require('broccoli-uglify-js');
 var mergeTrees = require('broccoli-merge-trees');
 var moveFile = require('broccoli-file-mover');
+var compile = require('broccoli-static-compiler');
 var stringify = require('stringify-object');
 
 var build = function() {
@@ -32,19 +33,13 @@ var build = function() {
     copy: true
   })
 
-
-  /*
-  //Attempting to create /prod directory for minified artifacts
-  var prod = uglify(moveFile(dev, {
-    files: {
-      '': '/prod'
-    },
-    copy: true
+  //Create /min directory for minified artifacts
+  var prod = uglify(compile(dev, {
+    srcDir: '/',
+    destDir: '/min'
   }));
-  //https://github.com/rjackson/broccoli-file-mover/issues/6
-  */
 
-  return mergeTrees([dev, main], {
+  return mergeTrees([dev, main, prod], {
     overwrite: true
   });
 };

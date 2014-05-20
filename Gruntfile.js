@@ -8,11 +8,20 @@ module.exports = function(grunt) {
         dest: ouptutDir
       }
     },
-    clean: [ouptutDir, 'main.js']
+    clean: [ouptutDir, 'main.js'],
+    shell: {
+      test: {
+        command: 'venus run -t test/ -n',
+        options: {
+          stdout: true
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-broccoli-build');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-shell');
 
   /*
   TODO
@@ -26,7 +35,8 @@ module.exports = function(grunt) {
     'clean',
     'broccoli_build'
   ]);
+
+  grunt.registerTask('test', 'Run unit tests', [
+    'shell:test'
+  ]);
 };
-
-
-

@@ -24,6 +24,8 @@
     "broccoli-merge-trees": "*",
     "broccoli-file-mover": "*",
     "grunt-open": "*",
-    "stringify-object": "*"
+    "stringify-object": "*",
+    "broccoli-static-compile": "*",
+    "grunt-shell": "*"
   }
 }
