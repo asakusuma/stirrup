@@ -50,3 +50,13 @@ var deferred = P.defer();
 deferred.fulfill('Great Success!');
 var promise = deferred.promise;
 ````
+
+### Deferred methods
+
+**.fulfill(value)** - Fulfills deferred.promise
+
+**.reject(value)** - Rejects deferred.promise
+
+## Todo
+* Promise inspection
+* Shimming deferred methods
