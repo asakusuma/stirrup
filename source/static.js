@@ -1,5 +1,5 @@
 
-Stirrup.prototype.buildStaticFunctions = function() {
+Stirrup.prototype.buildStaticFunctions = function(constructor) {
   var staticFuncs = this.getConfig().staticFuncs;
   for(var i = 0, len = staticFuncs.length; i < len; i++) {
     var def = staticFuncs[i];
@@ -16,10 +16,12 @@ Stirrup.prototype.buildStaticFunctions = function() {
       staticFunc = this.library[def.libName];
     }
 
-    //Attach function to aliases
-    var fLen = def.aliases.length;
-    for(var f = 0; f < fLen; f++) {
-      this[def.aliases[f]] = staticFunc;
+    if(def.aliases) {
+      //Attach function to aliases
+      var fLen = def.aliases.length;
+      for(var f = 0; f < fLen; f++) {
+        constructor[def.aliases[f]] = staticFunc;
+      }
     }
   }
 };
