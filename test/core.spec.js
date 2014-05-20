@@ -1,5 +1,6 @@
 /**
  * @venus-include ../lib/bluebird.js
+ * @venus-include ../lib/rsvp.js
  * @venus-include ../test-helpers.js
  */
 
@@ -10,16 +11,21 @@
  *  of Stirrup instances.
  */
 
-var Library = Promise.noConflict();
 Stirrup.prototype.getConfig = sinon.stub().returns({
-  constructor: null
+  constructor: 'defer'
 });
 Stirrup.prototype.buildStaticFunctions = sinon.stub();
+var instance;
 
 describe('Stirrup Core', function() {
 
-  var instance;
+  describe('Using bluebird', function() {
+    runTestsWithLibrary(Promise.noConflict());
+  });
 
+});
+
+function runTestsWithLibrary(Library) {
   describe('constructor', function() {
     it('should throw an error if no promise library supplied', function() {
       var error = '';
@@ -102,4 +108,4 @@ describe('Stirrup Core', function() {
       }).then(null, done);
     });
   });
-});
+}
