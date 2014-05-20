@@ -1,6 +1,9 @@
 module.exports = {
   constructor: 'Promise',
   defer: 'defer',
+  deferredFuncs: {
+    fulfill: 'resolve'
+  },
   staticFuncs: [
     {
       libName: 'all',
