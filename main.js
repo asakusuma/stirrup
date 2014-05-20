@@ -14,11 +14,8 @@ var Stirrup = function(library, config) {
   
   Stirrup.prototype.getConfig = function() {
     var config = {
-    	constructor: 'Promise',
+    	constructor: null,
     	defer: 'defer',
-    	deferredFuncs: {
-    		fulfill: 'resolve'
-    	},
     	staticFuncs: [
     		{
     			libName: 'all',
@@ -26,6 +23,24 @@ var Stirrup = function(library, config) {
     			aliases: [
     				'all',
     				'when'
+    			]
+    		},
+    		{
+    			libName: 'spread'
+    		},
+    		{
+    			libName: 'settle'
+    		},
+    		{
+    			libName: 'fulfill',
+    			aliases: [
+    				'fulfilled'
+    			]
+    		},
+    		{
+    			libName: 'reject',
+    			aliases: [
+    				'rejected'
     			]
     		}
     	]
