@@ -29,7 +29,7 @@ Stirrup.prototype.buildDefer = function(constructor) {
   var config = this.getConfig();
   if(!this.isNative && config.defer) {
     var defer = this.library[config.defer];
-    if(config.deferredFuncs) {
+    if(config.deferredFuncs) { //If we need to remap deferred functions
       constructor.defer = function() {
         var deferred = defer();
         if(config.deferredFuncs.fulfill) {
