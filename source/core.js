@@ -20,20 +20,20 @@ Stirrup.prototype.getConstructor = function() {
   if(!this.isNative) {
     return this.getConfig().constructor ? this.library[this.getConfig().constructor] : this.library;
   } else {
-    return this.library;
+    return Promise;
   }
 };
 
 Stirrup.prototype.buildDefer = function(constructor) {
   var config = this.getConfig();
   if(!this.isNative && config.defer) {
-    this.defer = this.library[config.defer];
+    constructor.defer = this.library[config.defer];
   } else {
     //TODO: Promise inspection capability
     //https://github.com/petkaantonov/bluebird/blob/master/API.md#inspect---promiseinspection
-    this.defer = function() {
+    var defer = function() {
       var fulfill, reject;
-      var promise = new constuctor(function(f, r) {
+      var promise = new constructor(function(f, r) {
         fulfill = f;
         reject = r;
       });
@@ -42,6 +42,7 @@ Stirrup.prototype.buildDefer = function(constructor) {
         reject: reject,
         promise: promise
       }
-    }
+    };
+    constructor.defer = defer;
   }
 };
