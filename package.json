@@ -18,13 +18,15 @@
     "broccoli-replace": "*",
     "grunt": "*",
     "grunt-contrib-clean": "*",
-    "grunt-broccoli-build": "*",
+    "broccoli-env": "*",
     "broccoli-uglify-js": "*",
     "broccoli-merge-trees": "*",
     "broccoli-file-mover": "*",
     "grunt-open": "*",
     "stringify-object": "*",
-    "broccoli-static-compile": "*",
-    "grunt-shell": "*"
+    "broccoli-static-compiler": "*",
+    "grunt-shell": "*",
+    "grunt-broccoli": "*",
+    "grunt-env": "*"
   }
 }

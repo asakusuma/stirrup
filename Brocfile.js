@@ -6,10 +6,11 @@ var mergeTrees = require('broccoli-merge-trees');
 var moveFile = require('broccoli-file-mover');
 var compile = require('broccoli-static-compiler');
 var stringify = require('stringify-object');
+var getEnv = require('broccoli-env').getEnv;
 
 var build = function() {
-
-  var config = 'var config = ' + stringify(require('./config/bluebird.js')).replace(/\n/g, '\n    ');
+  var library = getEnv('LIBRARY') || 'bluebird';
+  var config = 'var config = ' + stringify(require('./config/' + library + '.js')).replace(/\n/g, '\n    ');
   var core = fs.readFileSync('./source/core.js', 'utf8').replace(/\n/g, '\n  ').replace('//@@config', config);
   var statik = fs.readFileSync('./source/static.js', 'utf8').replace(/\n/g, '\n  ');
 

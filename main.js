@@ -14,8 +14,11 @@ var Stirrup = function(library, config) {
   
   Stirrup.prototype.getConfig = function() {
     var config = {
-    	constructor: null,
+    	constructor: 'Promise',
     	defer: 'defer',
+    	deferredFuncs: {
+    		fulfill: 'resolve'
+    	},
     	staticFuncs: [
     		{
     			libName: 'all',
@@ -23,24 +26,6 @@ var Stirrup = function(library, config) {
     			aliases: [
     				'all',
     				'when'
-    			]
-    		},
-    		{
-    			libName: 'spread'
-    		},
-    		{
-    			libName: 'settle'
-    		},
-    		{
-    			libName: 'fulfill',
-    			aliases: [
-    				'fulfilled'
-    			]
-    		},
-    		{
-    			libName: 'reject',
-    			aliases: [
-    				'rejected'
     			]
     		}
     	]
@@ -60,7 +45,7 @@ var Stirrup = function(library, config) {
     var config = this.getConfig();
     if(!this.isNative && config.defer) {
       var defer = this.library[config.defer];
-      if(config.deferredFuncs) {
+      if(config.deferredFuncs) { //If we need to remap deferred functions
         constructor.defer = function() {
           var deferred = defer();
           if(config.deferredFuncs.fulfill) {

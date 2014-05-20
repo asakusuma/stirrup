@@ -1,14 +1,17 @@
 module.exports = function(grunt) {
 
-  var ouptutDir = 'dist/';
+  var library = grunt.option('lib') || 'bluebird';
+
+  var outputDir = 'dist/';
 
   grunt.initConfig({
-    broccoli_build: {
-      assets: {
-        dest: ouptutDir
+    broccoli: {
+      artifacts: {
+        dest: outputDir,
+        config: 'Brocfile.js',
       }
     },
-    clean: [ouptutDir, 'main.js'],
+    clean: [outputDir, 'main.js'],
     shell: {
       test: {
         command: 'venus run -t test/ -n',
@@ -16,12 +19,18 @@ module.exports = function(grunt) {
           stdout: true
         }
       }
+    },
+    env: {
+      all: {
+        BROCCOLI_LIBRARY: library
+      }
     }
   });
 
-  grunt.loadNpmTasks('grunt-broccoli-build');
+  grunt.loadNpmTasks('grunt-broccoli');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-env');
 
   /*
   TODO
@@ -32,8 +41,9 @@ module.exports = function(grunt) {
   */
 
   grunt.registerTask('default', 'Build artifacts', [
+    'env:all',
     'clean',
-    'broccoli_build'
+    'broccoli:artifacts:build'
   ]);
 
   grunt.registerTask('test', 'Run unit tests', [
