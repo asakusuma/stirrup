@@ -1,18 +1,21 @@
-var Stirrup = function(library) {
+var Stirrup = function(library, config) {
     if(typeof library !== 'object' && typeof library !== 'function') {
       throw 'You must provide Stirrup with a promise library';
     }
+    this.config = config;
     this.library = library;
     this.isNative = (typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1);
   
-    this.buildDefer();
-    this.buildStaticFunctions();
-    return this.getConstructor();
+    var constructor = this.getConstructor();
+    this.buildDefer(constructor);
+    this.buildStaticFunctions(constructor);
+    return constructor;
   };
   
   Stirrup.prototype.getConfig = function() {
     var config = {
     	constructor: null,
+    	defer: 'defer',
     	staticFuncs: [
     		{
     			libName: 'all',
@@ -42,24 +45,41 @@ var Stirrup = function(library) {
     		}
     	]
     }
-    return config;
+    return this.config || config;
   };
   
   Stirrup.prototype.getConstructor = function() {
     if(!this.isNative) {
       return this.getConfig().constructor ? this.library[this.getConfig().constructor] : this.library;
     } else {
-      return this.library;
+      return Promise;
     }
   };
   
-  Stirrup.prototype.buildDefer = function() {
-    if(this.isNative) {
+  Stirrup.prototype.buildDefer = function(constructor) {
+    var config = this.getConfig();
+    if(!this.isNative && config.defer) {
+      var defer = this.library[config.defer];
+      if(config.deferredFuncs) {
+        constructor.defer = function() {
+          var deferred = defer();
+          if(config.deferredFuncs.fulfill) {
+            deferred.fulfill = deferred[config.deferredFuncs.fulfill];
+          }
+          if(config.deferredFuncs.reject) {
+            deferred.reject = deferred[config.deferredFuncs.reject];
+          }
+          return deferred;
+        }
+      } else {
+        constructor.defer = defer;
+      }
+    } else {
       //TODO: Promise inspection capability
       //https://github.com/petkaantonov/bluebird/blob/master/API.md#inspect---promiseinspection
-      this.defer = function() {
+      var defer = function() {
         var fulfill, reject;
-        var promise = new Promise(function(f, r) {
+        var promise = new constructor(function(f, r) {
           fulfill = f;
           reject = r;
         });
@@ -68,13 +88,13 @@ var Stirrup = function(library) {
           reject: reject,
           promise: promise
         }
-      }
-    } else {
-      this.defer = this.library.defer;
+      };
+      constructor.defer = defer;
     }
   };
+  
 
-  Stirrup.prototype.buildStaticFunctions = function() {
+  Stirrup.prototype.buildStaticFunctions = function(constructor) {
     var staticFuncs = this.getConfig().staticFuncs;
     for(var i = 0, len = staticFuncs.length; i < len; i++) {
       var def = staticFuncs[i];
@@ -91,12 +111,15 @@ var Stirrup = function(library) {
         staticFunc = this.library[def.libName];
       }
   
-      //Attach function to aliases
-      var fLen = def.aliases.length;
-      for(var f = 0; f < fLen; f++) {
-        this[def.aliases[f]] = staticFunc;
+      if(def.aliases) {
+        //Attach function to aliases
+        var fLen = def.aliases.length;
+        for(var f = 0; f < fLen; f++) {
+          constructor[def.aliases[f]] = staticFunc;
+        }
       }
     }
   };
+  
 
 module.exports = Stirrup;
