@@ -6,8 +6,8 @@ var Stirrup = function(library) {
     this.isNative = (typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1);
   
     this.buildDefer();
-    this.buildConstructor();
     this.buildStaticFunctions();
+    return this.getConstructor();
   };
   
   Stirrup.prototype.getConfig = function() {
@@ -45,11 +45,11 @@ var Stirrup = function(library) {
     return config;
   };
   
-  Stirrup.prototype.buildConstructor = function() {
+  Stirrup.prototype.getConstructor = function() {
     if(!this.isNative) {
-      this.Promise = this.getConfig().constructor ? this.library[this.getConfig().constructor] : this.library;
+      return this.getConfig().constructor ? this.library[this.getConfig().constructor] : this.library;
     } else {
-      this.Promise = this.library;
+      return this.library;
     }
   };
   
