@@ -10,9 +10,9 @@
  *  Tests the core promise-creating functionality
  *  of Stirrup instances.
  */
-
 Stirrup.prototype.getConfig = sinon.stub().returns({
-  constructor: 'defer'
+  constructor: null,
+  defer: 'defer'
 });
 Stirrup.prototype.buildStaticFunctions = sinon.stub();
 var instance;
@@ -20,28 +20,39 @@ var instance;
 describe('Stirrup Core', function() {
 
   describe('Using bluebird', function() {
-    runTestsWithLibrary(Promise.noConflict());
+    Stirrup.prototype.getConfig = sinon.stub().returns({
+      constructor: null,
+      defer: 'defer'
+    });
+    runTestsWithLibrary(Stirrup, Promise.noConflict());
   });
 
+  describe('Using RSVP', function() {
+    Stirrup.prototype.getConfig = sinon.stub().returns({
+      constructor: 'Promise',
+      defer: 'defer'
+    });
+    runTestsWithLibrary(Stirrup, RSVP);
+  });
 });
 
-function runTestsWithLibrary(Library) {
+function runTestsWithLibrary(stirrup, Library) {
   describe('constructor', function() {
     it('should throw an error if no promise library supplied', function() {
       var error = '';
       try {
-        instance = new Stirrup();
+        instance = new stirrup();
       } catch (e) {
         error = e;
       }
 
-      expect(error).to.be('You must provide Stirrup with a promise library');
+      expect(error).to.be.ok();
     });
   });
 
   describe('Instance function', function() {
     it('should create a new promise with a then() function', function() {
-      instance = new Stirrup(Library);
+      instance = new stirrup(Library);
 
       var promise = new instance(function() {});
 
@@ -50,7 +61,7 @@ function runTestsWithLibrary(Library) {
 
     it('should create a new fulfillable promise', function(done) {
       var value = {};
-      instance = new Stirrup(Library);
+      instance = new stirrup(Library);
 
       var promise = new instance(function(f) { f(value); });
 
@@ -62,7 +73,7 @@ function runTestsWithLibrary(Library) {
 
     it('should create a new rejectable promise', function(done) {
       var value = {};
-      instance = new Stirrup(Library);
+      instance = new stirrup(Library);
 
       var promise = new instance(function(f, r) { r(value); });
 
@@ -75,7 +86,7 @@ function runTestsWithLibrary(Library) {
 
   describe('defer()', function() {
     it('should create a new deferred with a promise promise property with a then() function', function() {
-      instance = new Stirrup(Library);
+      instance = new stirrup(Library);
 
       var deferred = instance.defer();
 
@@ -84,7 +95,7 @@ function runTestsWithLibrary(Library) {
 
     it('should create a new fulfillable deferred', function(done) {
       var value = {};
-      instance = new Stirrup(Library);
+      instance = new stirrup(Library);
 
       var deferred = instance.defer();
       deferred.fulfill(value);
@@ -97,7 +108,7 @@ function runTestsWithLibrary(Library) {
 
     it('should create a new rejectable deferred', function(done) {
       var value = {};
-      instance = new Stirrup(Library);
+      instance = new stirrup(Library);
 
       var deferred = instance.defer();
       deferred.reject(value);
