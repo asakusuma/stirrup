@@ -18,6 +18,12 @@ module.exports = function(grunt) {
         options: {
           stdout: true
         }
+      },
+      browsertest: {
+        command: 'venus run -t test/',
+        options: {
+          stdout: true
+        }
       }
     },
     env: {
@@ -48,5 +54,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', 'Run unit tests', [
     'shell:test'
+  ]);
+
+  grunt.registerTask('browsertest', 'Run unit tests', [
+    'shell:browsertest'
   ]);
 };

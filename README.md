@@ -1,4 +1,4 @@
-stirrup
+Stirrup
 =======
 
 Stirrup is a promise library wrapper and polyfill. Here is the official promise polyfill: https://github.com/jakearchibald/es6-promise
@@ -25,7 +25,7 @@ To specify a config use the `--lib=` argument when running grunt. For instance:
 ````
 grunt --lib=rsvp
 ````
-Will compile Stirrup using `/config/rsvp.json`. By default, the build process with load `/config/bluebird.json`.
+Will compile Stirrup using `/config/rsvp.js`. By default, the build process with load `/config/bluebird.js`.
 
 Config files are CommonJS modules that expose an object literal with the following properties:
 
@@ -78,6 +78,11 @@ var promise = deferred.promise;
 **.fulfill(value)** - Fulfills deferred.promise
 
 **.reject(value)** - Rejects deferred.promise
+
+## Running Tests
+
+* `grunt test` will run the tests via phantomJS
+* `grunt browsertest` will give you a URL to run the tests in a browser of your choice
 
 ## Todo
 * Promise inspection
