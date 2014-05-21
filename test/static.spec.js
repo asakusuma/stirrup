@@ -1,6 +1,7 @@
 /**
  * @venus-include ../source/static.js
  * @venus-include ../lib/bluebird.js
+ * @venus-include ../lib/rsvp.js
  * @venus-include ../test-helpers.js
  */
 
@@ -11,17 +12,21 @@
  *  static functions on the created Stirrup instance.
  */
 
-var Library = Promise.noConflict();
+var Library = RSVP;
+var NativeMock = Promise.noConflict();
 var Promise = null;
 var instance;
 
+Library.myIdenticalFunction = function() {};
+
 var stubNative = function() {
-  Promise = Library;
+  Promise = NativeMock;
   Promise.toString = sinon.stub().returns('[native code]');
 };
 
 var unStubNative = function() {
   Promise = null;
+  Library.myIdenticalFunction = function() {}
 };
 
 Stirrup.prototype.getConfig = sinon.stub().returns({
@@ -34,6 +39,9 @@ Stirrup.prototype.getConfig = sinon.stub().returns({
         'someAlias',
         'someOtherAlias'
       ]
+    },
+    {
+      libName: 'myIdenticalFunction'
     }
   ]
 });
@@ -49,10 +57,18 @@ describe('constructor', function() {
     it('should proxy library function to aliases', function() {
       instance = new Stirrup(Library);
 
-      var originalFunc = Promise.myNativeFunction;
+      var originalFunc = Library.myNativeFunction;
 
       expect(instance.someAlias).to.be(originalFunc);
       expect(instance.someOtherAlias).to.be(originalFunc);
+    });
+
+    it('should proxy library function to same name if no alias', function() {
+      instance = new Stirrup(Library);
+
+      var originalFunc = Library.myIdenticalFunction;
+
+      expect(instance.myIdenticalFunction).to.be(originalFunc);
     });
   });
 
@@ -66,10 +82,17 @@ describe('constructor', function() {
     it('should proxy native function to aliases', function() {
       instance = new Stirrup(Library);
 
-      var originalFunc = Library.myLibFunction;
+      var originalFunc = Promise.myLibFunction;
 
       expect(instance.someAlias).to.be(originalFunc);
       expect(instance.someOtherAlias).to.be(originalFunc);
+    });
+
+    it('should proxy library function to same name if no alias and no native function', function() {
+      instance = new Stirrup(Library);
+      var originalFunc = Library.myIdenticalFunction;
+
+      expect(instance.myIdenticalFunction).to.be(originalFunc);
     });
   });
 });

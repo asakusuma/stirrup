@@ -117,6 +117,8 @@ var Stirrup = function(library, config) {
         for(var f = 0; f < fLen; f++) {
           constructor[def.aliases[f]] = staticFunc;
         }
+      } else {
+        constructor[def.libName] = staticFunc;
       }
     }
   };
