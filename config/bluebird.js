@@ -17,7 +17,7 @@ module.exports = {
       libName: 'settle'
     },
     {
-      libName: 'fulfill',
+      libName: 'resolve',
       aliases: [
         'fulfilled'
       ]

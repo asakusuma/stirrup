@@ -12,6 +12,24 @@ module.exports = {
         'all',
         'when'
       ]
+    },
+    {
+      libName: 'allSettled',
+      aliases: [
+        'settle'
+      ]
+    },
+    {
+      libName: 'resolve',
+      aliases: [
+        'fulfilled'
+      ]
+    },
+    {
+      libName: 'reject',
+      aliases: [
+        'rejected'
+      ]
     }
   ]
 };
