@@ -1,1 +1,3 @@
-var Stirrup = {};
+var Stirrup = function(library, config) {
+  {{#if constructor}} return library[config.constructor]; {{else}} return library; {{/if}}
+}
