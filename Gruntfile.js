@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
 
   var library = grunt.option('lib') || 'bluebird';
+  var buildType = grunt.option('type') || 'dynamic';
 
   var outputDir = 'dist/';
 
@@ -28,7 +29,8 @@ module.exports = function(grunt) {
     },
     env: {
       all: {
-        BROCCOLI_LIBRARY: library
+        BROCCOLI_LIBRARY: library,
+        BROCCOLI_BUILD_TYPE: buildType
       }
     }
   });

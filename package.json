@@ -26,6 +26,7 @@
     "stringify-object": "*",
     "broccoli-static-compiler": "*",
     "grunt-shell": "*",
-    "grunt-broccoli": "*"
+    "grunt-broccoli": "*",
+    "handlebars": "*"
   }
 }
