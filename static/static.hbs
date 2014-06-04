@@ -1,3 +1,12 @@
 var Stirrup = function(library, config) {
-  {{#if constructor}} return library[config.constructor]; {{else}} return library; {{/if}}
+  if(typeof library !== 'object' && typeof library !== 'function') {
+    throw 'You must provide Stirrup with a promise library';
+  }
+  var isNative = (typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1);
+  var exposed;
+  if(isNative) {
+    exposed = Promise;
+  } else {
+    exposed = {{#if constructor}}library[config.constructor]{{else}}return library{{/if}};
+  }
 }
