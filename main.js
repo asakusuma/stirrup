@@ -29,7 +29,11 @@ var Stirrup = function(library, config) {
     			libName: 'spread'
     		},
     		{
-    			libName: 'settle'
+    			libName: 'allSettled',
+    			aliases: [
+    				'settle',
+    				'allSettled'
+    			]
     		},
     		{
     			libName: 'fulfill',
@@ -104,11 +108,11 @@ var Stirrup = function(library, config) {
       //the given function, save
       if(this.isNative && Promise[def.nativeName]) {
         staticFunc = Promise[def.nativeName];
-      }
-  
-      //If the function doesn't exist natively, use the library
-      if(!staticFunc) {
+      } else if(this.library[def.libName]) { //If the function doesn't exist natively, use the library
         staticFunc = this.library[def.libName];
+      } else {
+        console.error('Bad config. Could not find native or library function for "' + def.libName + '"');
+        return;
       }
   
       if(def.aliases) {
