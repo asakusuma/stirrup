@@ -21,16 +21,10 @@ module.exports = {
       ]
     },
     {
-      libName: 'fulfill',
-      aliases: [
-        'fulfilled'
-      ]
+      libName: 'resolve'
     },
     {
-      libName: 'reject',
-      aliases: [
-        'rejected'
-      ]
+      libName: 'reject'
     }
   ]
 };

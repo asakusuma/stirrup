@@ -1,33 +1,5 @@
-var Stirrup = function(library, config) {
-  if(typeof library !== 'object' && typeof library !== 'function') {
-    throw 'You must provide Stirrup with a promise library';
-  }
-  this.config = config;
-  this.library = library;
-  this.isNative = (typeof Promise === 'function' && Promise.toString().indexOf('[native code]') > -1);
-
-  var constructor = this.getConstructor();
-  this.buildDefer(constructor);
-  this.buildStaticFunctions(constructor);
-  return constructor;
-};
-
-Stirrup.prototype.getConfig = function() {
-  //@@config
-  return this.config || config;
-};
-
-Stirrup.prototype.getConstructor = function() {
-  if(!this.isNative) {
-    return this.getConfig().constructor ? this.library[this.getConfig().constructor] : this.library;
-  } else {
-    return Promise;
-  }
-};
-
-Stirrup.prototype.buildDefer = function(constructor) {
-  var config = this.getConfig();
-  if(!this.isNative && config.defer) {
+var buildDefer = function(constructor, config, isNative) {
+  if(!isNative && config.defer) {
     var defer = this.library[config.defer];
     if(config.deferredFuncs) { //If we need to remap deferred functions
       constructor.defer = function() {

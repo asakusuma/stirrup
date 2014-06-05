@@ -17,16 +17,10 @@ module.exports = {
       libName: 'settle'
     },
     {
-      libName: 'resolve',
-      aliases: [
-        'fulfilled'
-      ]
+      libName: 'resolve'
     },
     {
-      libName: 'reject',
-      aliases: [
-        'rejected'
-      ]
+      libName: 'reject'
     }
   ]
 };

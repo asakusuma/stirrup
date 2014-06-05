@@ -7,6 +7,32 @@ var Stirrup = function(library, config) {
   if(isNative) {
     exposed = Promise;
   } else {
-    exposed = {{#if constructor}}library[config.constructor]{{else}}return library{{/if}};
+    exposed = {{#if constructor}}library[config.constructor]{{else}}library{{/if}};
   }
+  buildDefer(exposed, config, isNative);
+  /*
+  libName: 'all',
+      nativeName: 'all',
+      aliases
+      */
+
+  var staticFunc;
+  {{#each staticFuncs}}
+    {{#if nativeName}}
+    if(isNative && Promise['{{nativeName}}']) {
+      staticFunc = Promise['{{nativeName}}'];
+    } else {{/if}}if(library['{{libName}}') { //If the function doesn't exist natively, use the library
+      staticFunc = library['{{libName}}'];
+    }
+
+
+    {{#if aliases}}
+      {{#each aliases}}
+        exposed['{{this}}'] = staticFunc;
+      {{/each}}
+    {{else}}
+      exposed['{{libName}}'] = staticFunc;
+    {{/if}}
+  {{/each}}
+  return exposed;
 }

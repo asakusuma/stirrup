@@ -11,7 +11,7 @@ var handlebars = require('handlebars');
 var dynamic = function(config) {
   var core = fs.readFileSync('./source/core.js', 'utf8').replace(/\n/g, '\n  ').replace('//@@config', 'var config = ' + stringify(config).replace(/\n/g, '\n    '));
   var statik = fs.readFileSync('./source/static.js', 'utf8').replace(/\n/g, '\n  ');
-  return core + '\n' + statik;
+  return buildDefer + '\n' + core + '\n' + statik;
 };
 
 var statik = function(config) {
@@ -26,12 +26,12 @@ var build = function() {
 
   var config = require('./config/' + library + '.js');
 
-  var source;
+  var source = (fs.readFileSync('./source/buildDefer.js', 'utf8') + '\n').replace(/\n/g, '\n  ');
 
   if (buildType === 'static') {
-    source = statik(config);
+    source += statik(config);
   } else {
-    source = dynamic(config);
+    source += dynamic(config);
   }
 
   var dev = replace('templates', {
