@@ -26,12 +26,16 @@ var build = function() {
 
   var config = require('./config/' + library + '.js');
 
-  var source = (fs.readFileSync('./source/buildDefer.js', 'utf8') + '\n').replace(/\n/g, '\n  ');
+  var source = '';
+  var buildDefer = (fs.readFileSync('./source/buildDefer.js', 'utf8') + '\n').replace(/\n/g, '\n  ');
 
   if (buildType === 'static') {
+    if(config.deferredFuncs) {
+      source += buildDefer;
+    }
     source += statik(config);
   } else {
-    source += dynamic(config);
+    source = buildDefer + dynamic(config);
   }
 
   var dev = replace('templates', {
@@ -58,7 +62,7 @@ var build = function() {
     destDir: '/min'
   }));
 
-  return mergeTrees([dev, main, prod], {
+  return mergeTrees([dev, main], {
     overwrite: true
   });
 };
