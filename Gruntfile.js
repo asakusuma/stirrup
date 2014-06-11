@@ -48,11 +48,16 @@ module.exports = function(grunt) {
     - In different browsers with grunt-open
   */
 
-  grunt.registerTask('default', 'Build artifacts', [
+  var buildTasks = [
     'env:all',
-    'clean',
     'broccoli:artifacts:build'
-  ]);
+  ];
+
+  if(buildType !== 'static') {
+    buildTasks.unshift('clean');
+  }
+
+  grunt.registerTask('default', 'Build artifacts', buildTasks);
 
   grunt.registerTask('test', 'Run unit tests', [
     'shell:test'

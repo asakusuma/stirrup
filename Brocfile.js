@@ -7,17 +7,35 @@ var moveFile = require('broccoli-file-mover');
 var compile = require('broccoli-static-compiler');
 var stringify = require('stringify-object');
 var handlebars = require('handlebars');
+var _ = require('underscore');
+
+var mapConfigForTemplate = function(config) {
+  if(config.staticFuncs) {
+    for(var i = 0; i < config.staticFuncs.length; i++) {
+      var func = config.staticFuncs[i];
+      if(func.aliases) {
+        if(func.libName) {
+          func.libAliases = _.without(func.aliases, func.libName);
+        }
+        if(func.nativeName) {
+          func.nativeAliases = _.without(func.aliases, func.nativeName);
+        }
+      }
+    }
+  }
+  return config;
+};
 
 var dynamic = function(config) {
   var core = fs.readFileSync('./source/core.js', 'utf8').replace(/\n/g, '\n  ').replace('//@@config', 'var config = ' + stringify(config).replace(/\n/g, '\n    '));
   var statik = fs.readFileSync('./source/static.js', 'utf8').replace(/\n/g, '\n  ');
-  return buildDefer + '\n' + core + '\n' + statik;
+  return core + '\n' + statik;
 };
 
 var statik = function(config) {
   var template = handlebars.compile(fs.readFileSync('./static/static.hbs', 'utf8'));
 
-  return template(config).replace(/\n/g, '\n  ');
+  return template(mapConfigForTemplate(config)).replace(/\n/g, '\n  ');
 };
 
 var build = function() {
@@ -62,7 +80,13 @@ var build = function() {
     destDir: '/min'
   }));
 
-  return mergeTrees([dev, main], {
+  var trees = [dev, prod];
+
+  if(buildType !== 'static') {
+    trees.push(main);
+  }
+
+  return mergeTrees(trees, {
     overwrite: true
   });
 };

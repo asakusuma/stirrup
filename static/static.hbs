@@ -9,13 +9,10 @@ var Stirrup = function(library, config) {
   } else {
     exposed = {{#if constructor}}library[config.constructor]{{else}}library{{/if}};
   }
-  buildDefer(exposed, config, isNative);
-  {{#each staticFuncs}}{{#if nativeName}}
+  {{#if deferredFuncs}}buildDefer(exposed, config, isNative);{{/if}}{{#each staticFuncs}}{{#if nativeName}}
   if(isNative && Promise['{{nativeName}}']) {
-  {{#if aliases}}{{#each aliases}}  exposed['{{this}}'] = Promise['{{../nativeName}}'];{{/each}}{{else}}
-    exposed['{{libName}}'] = Promise['{{nativeName}}'];
-  {{/if}}
-  } else { {{#each aliases}}
+  {{#if aliases}}{{#each nativeAliases}}  exposed['{{this}}'] = Promise['{{../nativeName}}'];{{/each}}{{else}}exposed['{{libName}}'] = Promise['{{nativeName}}'];{{/if}}
+  } else { {{#each libAliases}}
     exposed['{{this}}'] = library['{{../libName}}'];{{/each}}
   }
   {{else}}{{#each aliases}}

@@ -27,6 +27,7 @@
     "broccoli-static-compiler": "*",
     "grunt-shell": "*",
     "grunt-broccoli": "*",
-    "handlebars": "*"
+    "handlebars": "*",
+    "underscore": "*"
   }
 }
